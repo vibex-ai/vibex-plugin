@@ -1,0 +1,99 @@
+name: index
+
+# The catalog is a static site: `plugins/**/plugin.json` is the source of
+# truth, and this workflow turns it into the signed `dist/index.json` the
+# desktop reads. Nothing here runs a server.
+
+on:
+  pull_request:
+    paths:
+      - "plugins/**"
+      - "publisher-keys.json"
+      - "revocations.json"
+      - ".github/workflows/index.yml"
+  push:
+    branches: [main]
+    paths:
+      - "plugins/**"
+      - "publisher-keys.json"
+      - "revocations.json"
+      - ".github/workflows/index.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  # A pull request only checks: the signed index is built on `main` so a
+  # contributor cannot produce a revision the maintainers did not review.
+  validate:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: Install the index tool
+        run: cargo install --git https://github.com/vibex-ai/vibex --locked vibex-plugin
+      - name: Validate every entry
+        run: vibex-plugin index validate --catalog .
+
+  # On `main`, build and sign the index, then commit it back. jsDelivr and
+  # `raw.githubusercontent.com` both serve the committed `dist/`, so there is
+  # no upload step.
+  build:
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: Install the index tool
+        run: cargo install --git https://github.com/vibex-ai/vibex --locked vibex-plugin
+      - name: Build and sign
+        env:
+          PLUGIN_ROOT_KEY_SEED: ${{ secrets.PLUGIN_ROOT_KEY_SEED }}
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          if [ -z "${PLUGIN_ROOT_KEY_SEED:-}" ]; then
+            echo "::warning::PLUGIN_ROOT_KEY_SEED is not set; the signed index was not rebuilt"
+            exit 0
+          fi
+
+          # The revision must only ever grow: a client refuses an index older
+          # than the one it already accepted, so a replayed older index cannot
+          # roll a catalog back.
+          previous=0
+          if [ -f dist/index.json ]; then
+            previous=$(python3 -c "import json;print(json.load(open('dist/index.json'))['revision'])")
+          fi
+          revision=$(( previous + 1 ))
+
+          vibex-plugin index build \
+            --catalog . \
+            --key "$PLUGIN_ROOT_KEY_SEED" \
+            --revision "$revision" \
+            --publisher-keys publisher-keys.json
+
+          # The revocation list lives beside the index and is signed the same way.
+          cp revocations.json dist/revocations.json
+          vibex-plugin sign-index dist/revocations.json \
+            --key "$PLUGIN_ROOT_KEY_SEED" \
+            --output dist/revocations.json.sig
+
+          vibex-plugin index validate --catalog .
+      - name: Commit the built index
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dist
+          if git diff --cached --quiet; then
+            echo "the index is unchanged"
+          else
+            git commit -m "chore(index): rebuild for ${GITHUB_SHA::7}"
+            git push
+          fi
