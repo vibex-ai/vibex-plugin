@@ -2,11 +2,14 @@
   "schemaVersion": 1,
   "id": "dev.vibex.todo",
   "name": "Todo",
-  "version": "1.0.0",
-  "description": "A todo list in the right rail, kept between runs.",
+  "version": "1.1.0",
+  "description": "A task list in the right rail: priorities, search, inline editing and progress, kept between runs.",
   "license": "MIT",
   "entry": "main.js",
-  "categories": ["productivity", "panels"],
+  "categories": [
+    "productivity",
+    "panels"
+  ],
   "capabilities": {
     "panel": true,
     "storage": true

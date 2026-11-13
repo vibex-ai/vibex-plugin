@@ -4,31 +4,50 @@
     "name": "Todo",
     "kind": "script",
     "listingSource": "index",
-    "summary": "A todo list in the right rail, kept between runs.",
-    "publisher": { "id": "vibex", "displayName": "Vibex", "verified": true },
-    "categories": ["productivity", "panels"],
-    "latestVersion": "1.0.0",
+    "summary": "A task list in the right rail: priorities, search, inline editing and progress, kept between runs.",
+    "publisher": {
+      "id": "vibex",
+      "displayName": "Vibex",
+      "verified": true
+    },
+    "categories": [
+      "productivity",
+      "panels"
+    ],
+    "latestVersion": "1.1.0",
     "license": "MIT",
     "trust": "official",
     "repository": "https://github.com/vibex-ai/vibex-plugin",
     "permissions": [
-      { "key": "ui.panel", "risk": "low" },
-      { "key": "storage", "risk": "low" }
+      {
+        "key": "ui.panel",
+        "risk": "low"
+      },
+      {
+        "key": "storage",
+        "risk": "low"
+      }
     ]
   },
   "versions": [
     {
-      "version": "1.0.0",
-      "url": "https://raw.githubusercontent.com/vibex-ai/vibex-plugin/main/packages/dev.vibex.todo-1.0.0.vplug",
-      "sizeBytes": 2752,
-      "sha256": "4d8abd11a39a260499bf10c65d424417fca2dd5b8dbd29f0d30b9a25cff43dee",
-      "sha512": "a483966585689bedc0adf28be00d70fac063c329e50d5e76041657a3192660135402a89ac199f3f1458eaca8a0762922d47363fb9973cb62a5fe3fe250c672db",
+      "version": "1.1.0",
+      "url": "https://raw.githubusercontent.com/vibex-ai/vibex-plugin/main/packages/dev.vibex.todo-1.1.0.vplug",
+      "sizeBytes": 5721,
+      "sha256": "4d812a1689b1b7753a1dba1af43aeaa2695cd15719e7031f4a8c79e01be340ec",
+      "sha512": "d3d0246feb26058b410ed27253972a8bfae0372208a3bf288006e8b86919082823c8e90a4f77baf2fe5b1dd88828146b4061c560977d533c9b3c7cf4d68c16a7",
       "permissions": [
-        { "key": "ui.panel", "risk": "low" },
-        { "key": "storage", "risk": "low" }
+        {
+          "key": "ui.panel",
+          "risk": "low"
+        },
+        {
+          "key": "storage",
+          "risk": "low"
+        }
       ]
     }
   ],
-  "description": "A todo list you can keep in the right rail. It stores its items in the plugin's own data directory, so they survive a restart and a disable/enable cycle.",
-  "readme": "Todo is the smallest useful plugin: one panel, one list, one file.\n\nAdd an item with the field at the top, tick it off, filter by All / Active / Done, and clear the finished ones. The list is written to `vibex-settings.json` in the plugin's data directory.\n\nIt asks for `ui.panel` (a place in the right rail) and `storage` (a file of its own), and nothing else."
+  "description": "A task list you can keep in the right rail. Each task carries a priority and the time it was added; the header shows how much of the list is done. Long lists scroll under the composer, and anything finished folds into a Done section that stays out of the way.\n\nType to add, click a row to rename it, click the bar to cycle its priority. Search appears once the list is longer than a few tasks, and the footer switches between All / Active / Done and Manual / Priority / Recent ordering. Everything is stored in the plugin's own data directory, so it survives a restart and a disable/enable cycle.",
+  "readme": "Todo is the smallest useful plugin, taken seriously: one panel, one list, one file.\n\n**Adding.** Type in the field at the top and press Enter or click Add. The three chips under it set the priority the next task gets.\n\n**Working the list.** Click a checkbox to finish a task; the header's bar and counter follow along. Click a row's text to rename it in place — Enter saves, Escape and an empty field cancel, so a slip of the keyboard cannot delete a task. The small bar on the left of each row is its priority; the `!` button cycles it.\n\n**Finding things.** Past a few tasks a search field appears and filters as you type. The footer's All / Active / Done buttons filter, and the Manual / Priority / Recent buttons reorder.\n\n**Finishing up.** Completed tasks fold into a Done section you can collapse with a click; Clear removes them. The choice of filter, ordering and whether Done is open are remembered too.\n\nIt asks for `ui.panel` (a place in the right rail) and `storage` (a file of its own), and nothing else."
 }
