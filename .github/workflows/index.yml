@@ -34,7 +34,14 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
       - name: Install the index tool
-        run: cargo install --git https://github.com/vibex-ai/vibex --locked vibex-plugin
+        # The tool is pinned to a branch, not `main`: `vibex-plugin` ships on
+        # the plugin-market branch first, and an unpinned install would start
+        # failing the moment that branch is rebased or the crate moves.
+        env:
+          VIBEX_REF: ${{ vars.VIBEX_PLUGIN_TOOL_REF || 'feat/plugin-market' }}
+        run: |
+          cargo install --git https://github.com/vibex-ai/vibex \
+            --branch "$VIBEX_REF" --locked vibex-plugin
       - name: Validate every entry
         run: vibex-plugin index validate --catalog .
 
@@ -51,7 +58,14 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
       - name: Install the index tool
-        run: cargo install --git https://github.com/vibex-ai/vibex --locked vibex-plugin
+        # The tool is pinned to a branch, not `main`: `vibex-plugin` ships on
+        # the plugin-market branch first, and an unpinned install would start
+        # failing the moment that branch is rebased or the crate moves.
+        env:
+          VIBEX_REF: ${{ vars.VIBEX_PLUGIN_TOOL_REF || 'feat/plugin-market' }}
+        run: |
+          cargo install --git https://github.com/vibex-ai/vibex \
+            --branch "$VIBEX_REF" --locked vibex-plugin
       - name: Build and sign
         env:
           PLUGIN_ROOT_KEY_SEED: ${{ secrets.PLUGIN_ROOT_KEY_SEED }}

@@ -1,0 +1,2 @@
+# Packages are binary; keep git from rewriting or diffing them.
+*.vplug binary

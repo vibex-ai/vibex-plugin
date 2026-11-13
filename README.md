@@ -9,6 +9,8 @@ that is exactly what it is.
 
 ```
 plugins/<publisher>/<id>/plugin.json   one reviewed catalog entry
+examples/<id>/                         the source of a first-party plugin
+packages/<id>-<version>.vplug          the built package an entry points at
 publisher-keys.json                    publisher public keys the index vouches for
 revocations.json                       blocked plugins and versions
 dist/index.json                        built and signed by CI
@@ -17,8 +19,13 @@ dist/revocations.json
 dist/revocations.json.sig
 ```
 
-`dist/` is generated. Edit `plugins/`, `publisher-keys.json` and
-`revocations.json`; never edit `dist/` by hand.
+`dist/` is generated. Edit `plugins/`, `examples/`, `packages/`,
+`publisher-keys.json` and `revocations.json`; never edit `dist/` by hand.
+
+`examples/` holds the readable source of the first-party plugins so the catalog
+is reproducible: `vibex-plugin pack examples/<id>` rebuilds the `.vplug` in
+`packages/`, and its hash is what the entry publishes. A third-party plugin
+keeps its source in its own repository and only its built package lands here.
 
 ## Index addresses
 
@@ -35,10 +42,10 @@ A build may point somewhere else with `VIBEX_PLUGIN_INDEX` (comma-separated).
 
    ```sh
    vibex-plugin pack ./my-plugin
-   vibex-plugin sign my-plugin.vibexplug --key "$PUBLISHER_KEY"
+   vibex-plugin sign my-plugin.vplug --key "$PUBLISHER_KEY"
    ```
 
-2. Host the `.vibexplug` somewhere stable and immutable — a GitHub Release is
+2. Host the `.vplug` somewhere stable and immutable — a GitHub Release is
    the usual choice — and note its SHA-256.
 
 3. Add `plugins/<publisher>/<id>/plugin.json`:
@@ -59,7 +66,7 @@ A build may point somewhere else with `VIBEX_PLUGIN_INDEX` (comma-separated).
      "versions": [
        {
          "version": "1.2.0",
-         "url": "https://github.com/example/vibex-widgets/releases/download/v1.2.0/com.example.widgets-1.2.0.vibexplug",
+         "url": "https://github.com/example/vibex-widgets/releases/download/v1.2.0/com.example.widgets-1.2.0.vplug",
          "sizeBytes": 12345,
          "sha256": "…",
          "sha512": "…"
@@ -81,9 +88,28 @@ A build may point somewhere else with `VIBEX_PLUGIN_INDEX` (comma-separated).
    every entry: the id, the version list, the hashes, the screenshot and icon
    addresses, and the JSON itself.
 
+## First-party plugins
+
+`plugins/vibex/todo/plugin.json` is the worked example. Its package lives at
+`packages/dev.vibex.todo-1.0.0.vplug` and the entry pins its `sha256`, so the
+index is what makes the download trustworthy: the client checks the hash it
+read from the signed index, not one the package claims for itself.
+
+Rebuilding it:
+
+```sh
+vibex-plugin pack examples/dev.vibex.todo \
+  --output packages/dev.vibex.todo-1.0.0.vplug
+vibex-plugin hash packages/dev.vibex.todo-1.0.0.vplug   # update sha256/sha512
+```
+
 ## What CI does
 
 - **Pull request** — validate only. A contributor cannot build a revision.
+- **Installing the tool** — `cargo install --git ... --branch "$VIBEX_PLUGIN_TOOL_REF"`
+  (default `feat/plugin-market`, override with a repository variable), because
+  `vibex-plugin` ships on that branch before it reaches `main`. An unpinned
+  install would start failing the moment the branch is rebased.
 - **Push to `main`** — build and sign `dist/index.json` and the revocation
   list, then commit `dist/` back. The revision only ever grows, so a replayed
   older index cannot roll a catalog back.

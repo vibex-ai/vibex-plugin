@@ -1,0 +1,71 @@
+{
+  "schema": 1,
+  "generatedAt": "2026-11-13T09:46:39Z",
+  "revision": 1,
+  "publisherKeys": [],
+  "plugins": [
+    {
+      "entry": {
+        "id": "dev.vibex.todo",
+        "name": "Todo",
+        "kind": "script",
+        "bundled": false,
+        "listingSource": "index",
+        "summary": "A todo list in the right rail, kept between runs.",
+        "publisher": {
+          "id": "vibex",
+          "displayName": "Vibex",
+          "verified": true
+        },
+        "categories": [
+          "productivity",
+          "panels"
+        ],
+        "tags": [],
+        "latestVersion": "1.0.0",
+        "installs": 0,
+        "license": "MIT",
+        "repository": "https://github.com/vibex-ai/vibex-plugin",
+        "trust": "official",
+        "permissions": [
+          {
+            "key": "ui.panel",
+            "risk": "low"
+          },
+          {
+            "key": "storage",
+            "risk": "low"
+          }
+        ],
+        "compatibility": {
+          "platforms": []
+        },
+        "featured": false
+      },
+      "versions": [
+        {
+          "version": "1.0.0",
+          "sizeBytes": 2752,
+          "sha256": "4d8abd11a39a260499bf10c65d424417fca2dd5b8dbd29f0d30b9a25cff43dee",
+          "sha512": "a483966585689bedc0adf28be00d70fac063c329e50d5e76041657a3192660135402a89ac199f3f1458eaca8a0762922d47363fb9973cb62a5fe3fe250c672db",
+          "url": "https://raw.githubusercontent.com/vibex-ai/vibex-plugin/main/packages/dev.vibex.todo-1.0.0.vplug",
+          "permissions": [
+            {
+              "key": "ui.panel",
+              "risk": "low"
+            },
+            {
+              "key": "storage",
+              "risk": "low"
+            }
+          ],
+          "platforms": [],
+          "yanked": false
+        }
+      ],
+      "description": "A todo list you can keep in the right rail. It stores its items in the plugin's own data directory, so they survive a restart and a disable/enable cycle.",
+      "readme": "Todo is the smallest useful plugin: one panel, one list, one file.\n\nAdd an item with the field at the top, tick it off, filter by All / Active / Done, and clear the finished ones. The list is written to `vibex-settings.json` in the plugin's data directory.\n\nIt asks for `ui.panel` (a place in the right rail) and `storage` (a file of its own), and nothing else."
+    }
+  ],
+  "revocationsRevision": 0
+}
