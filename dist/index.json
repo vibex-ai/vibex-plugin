@@ -1,7 +1,7 @@
 {
   "schema": 1,
-  "generatedAt": "2026-11-13T17:38:17Z",
-  "revision": 6,
+  "generatedAt": "2026-11-14T06:33:54Z",
+  "revision": 7,
   "publisherKeys": [
     {
       "publisherId": "acme",
@@ -96,7 +96,7 @@
           "panels"
         ],
         "tags": [],
-        "latestVersion": "1.1.0",
+        "latestVersion": "1.1.1",
         "installs": 0,
         "license": "MIT",
         "repository": "https://github.com/vibex-ai/vibex-plugin",
@@ -118,11 +118,11 @@
       },
       "versions": [
         {
-          "version": "1.1.0",
-          "sizeBytes": 5721,
-          "sha256": "4d812a1689b1b7753a1dba1af43aeaa2695cd15719e7031f4a8c79e01be340ec",
-          "sha512": "d3d0246feb26058b410ed27253972a8bfae0372208a3bf288006e8b86919082823c8e90a4f77baf2fe5b1dd88828146b4061c560977d533c9b3c7cf4d68c16a7",
-          "url": "https://raw.githubusercontent.com/vibex-ai/vibex-plugin/main/packages/dev.vibex.todo-1.1.0.vplug",
+          "version": "1.1.1",
+          "sizeBytes": 5718,
+          "sha256": "bd6945eff63b1c0c67a9f7cb29a341f9813cd28d4230c82da089153666d9e4e5",
+          "sha512": "6db007edc0ae235fe1c63991e35b32583b9ce2aadb167b997ddccf35c73f8b2a7d468134b6f695fe90a9433378153cd4e1dd58ec4a162940c962dcaec71bb585",
+          "url": "https://raw.githubusercontent.com/vibex-ai/vibex-plugin/main/packages/dev.vibex.todo-1.1.1.vplug",
           "permissions": [
             {
               "key": "ui.panel",

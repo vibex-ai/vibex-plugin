@@ -350,12 +350,12 @@ export default class TodoList extends View {
           // all. The visible bar is a track holding an indicator the script
           // sizes from the same number it gave `value`.
           .child(
-            new Progress("todo-progress")
+            Progress.new("todo-progress")
               .value(this.ratio)
               .accessibility_label(`${this.completed} of ${total} tasks done`)
               .w_full()
               .child(
-                new ProgressTrack()
+                ProgressTrack.new()
                   .w_full()
                   .h(3)
                   .rounded(2)
@@ -364,7 +364,7 @@ export default class TodoList extends View {
                     // `w` takes pixels for a number and a fraction for a
                     // `"50%"` string, so the ratio has to be spelled as a
                     // percentage or the bar would be a few pixels wide.
-                    new ProgressIndicator()
+                    ProgressIndicator.new()
                       .h_full()
                       .w(`${this.ratio}%`)
                       .rounded(2)
@@ -391,7 +391,7 @@ export default class TodoList extends View {
           .items_center()
           .gap(SPACE.xs)
           .child(
-            new Input(this.draft)
+            Input.new(this.draft)
               .flex_1()
               .h(28)
               .px(SPACE.sm)
@@ -439,7 +439,7 @@ export default class TodoList extends View {
   }
 
   searchBar(colors) {
-    return new Input(this.search)
+    return Input.new(this.search)
       .w_full()
       .h(26)
       .px(SPACE.sm)
@@ -494,7 +494,7 @@ export default class TodoList extends View {
         .rounded(6)
         .bg(colors.muted)
         .child(
-          new Input(this.editor)
+          Input.new(this.editor)
             .flex_1()
             .h(26)
             .px(SPACE.sm)
@@ -549,7 +549,7 @@ export default class TodoList extends View {
           .bg(item.done ? colors.border : marker),
       )
       .child(
-        new Checkbox(`todo-check-${item.id}`)
+        Checkbox.new(`todo-check-${item.id}`)
           .checked(item.done)
           .on_change((done, cx) => this.toggle(item.id, done, cx)),
       )

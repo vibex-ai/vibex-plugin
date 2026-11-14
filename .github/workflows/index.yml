@@ -44,6 +44,15 @@ jobs:
             --branch "$VIBEX_REF" --locked vibex-plugin
       - name: Validate every entry
         run: vibex-plugin index validate --catalog .
+      - name: Check the first-party scripts against the host API
+        run: |
+          set -euo pipefail
+          # Only the examples/ tree has scripts to check; a third-party package
+          # arrives as a built .vplug and its source lives elsewhere.
+          shopt -s nullglob
+          for script in examples/*/main.js; do
+            node tools/check-plugin-api.mjs "$script"
+          done
 
   # On `main`, build and sign the index, then commit it back. jsDelivr and
   # `raw.githubusercontent.com` both serve the committed `dist/`, so there is
